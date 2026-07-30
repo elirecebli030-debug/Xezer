@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xəzər Admin Girişi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0b1220 0%, #0f172a 45%, #0c4a6e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #06b6d4 0%, #0284c7 50%, #1d4ed8 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 12px 30px -8px rgba(8, 145, 178, 0.45);
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #0f172a;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #06b6d4;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.12);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #06b6d4 0%, #0284c7 50%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 14px 30px -10px rgba(8, 145, 178, 0.45);
+            margin-top: 4px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 36px -10px rgba(8, 145, 178, 0.55);
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .success-msg {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        .success-msg.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .login-footer a {
+            color: #06b6d4;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Admin Panel */
+        .hidden {
+            display: none !important;
+        }
+
+        .admin-panel {
+            width: 100%;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .admin-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .admin-header button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .admin-header button:hover {
+            background: #dc2626;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .admin-tabs button {
+            flex: 1;
+            min-width: 70px;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .admin-tabs button.active {
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .admin-tabs button:hover:not(.active) {
+            color: #0f172a;
+        }
+
+        .admin-content {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 300px;
+        }
+
+        .admin-content .placeholder {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px 0;
+            font-size: 14px;
+        }
+
+        /* Password Change Section */
+        .password-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .password-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .password-section .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .password-section .form-group {
+            margin-bottom: 0;
+        }
+
+        .password-section .form-group input {
+            font-size: 13px;
+            padding: 10px 14px;
+        }
+
+        .password-section .btn-change-password {
+            margin-top: 12px;
+            padding: 10px 24px;
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .password-section .btn-change-password:hover {
+            background: #7c3aed;
+        }
+
+        .password-section .btn-change-password:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #0369a1;
+            margin-top: 12px;
+        }
+
+        .info-box strong {
+            color: #0c4a6e;
+        }
+
+        /* Settings List */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-item .label {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 14px;
+        }
+
+        .setting-item .value {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .toggle-btn {
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .toggle-btn.active {
+            background: #06b6d4;
+        }
+
+        .toggle-btn.inactive {
+            background: #cbd5e1;
+        }
+
+        .toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        .toggle-btn.active::after {
+            left: 22px;
+        }
+
+        @media (max-width: 600px) {
+            .login-card {
+                padding: 28px 20px;
+            }
+            .password-section .form-row {
+                grid-template-columns: 1fr;
+            }
+            .admin-tabs button {
+                font-size: 11px;
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Giriş Formu -->
+            <div id="loginForm">
+                <div class="login-header">
+                    <div class="login-logo">XK</div>
+                    <h1 class="login-title">Xəzər Admin Girişi</h1>
+                    <p class="login-subtitle">İdarəetmə panelinə daxil olun</p>
+                </div>
+
+                <div id="errorMsg" class="error-msg">❌ Yanlış email və ya parol</div>
+                <div id="successMsg" class="success-msg">✅ Əməliyyat uğurlu oldu!</div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="adminEmail" placeholder="admin@xezerkredit.az" autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Parol</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+                </div>
+
+                <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+                    <span id="loginText">Daxil Ol</span>
+                </button>
+
+                <div class="login-footer">
+                    <a href="/">← Ana səhifəyə qayıt</a>
+                </div>
+            </div>
+
+            <!-- Admin Panel -->
+            <div id="adminPanel" class="hidden admin-panel">
+                <div class="admin-header">
+                    <h2>⚙️ Admin Panel</h2>
+                    <button onclick="logout()">🚪 Çıxış</button>
+                </div>
+
+                <!-- Tabs -->
+                <div class="admin-tabs">
+                    <button class="active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 İdarə</button>
+                    <button data-tab="password" onclick="switchTab('password')">🔑 Parol</button>
+                    <button data-tab="settings" onclick="switchTab('settings')">⚙️ Parametrlər</button>
+                    <button data-tab="users" onclick="switchTab('users')">👥 İstifadəçilər</button>
+                </div>
+
+                <!-- Content -->
+                <div class="admin-content" id="adminContent">
+                    <!-- Dashboard -->
+                    <div id="tab-dashboard" class="tab-content">
+                        <div class="placeholder">
+                            <div style="font-size:48px;margin-bottom:12px;">📊</div>
+                            <p style="font-weight:600;color:#0f172a;font-size:16px;">Xoş gəldiniz, Admin!</p>
+                            <p>Sistem idarəetmə panelinə daxil oldunuz.</p>
+                            <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;">
+                                <div style="background:white;padding:16px;border-radius:8px;border:1px solid #e2e8f0;">
+                                    <div style="font-size:12px;color:#94a3b8;">Aktiv İstifadəçilər</div>
+                                    <div style="font-size:24px;font-weight:800;color:#0f172a;" id="userCount">0</div>
+                                </div>
+                                <div style="background:white;padding:16px;border-radius:8px;border:1px solid #e2e8f0;">
+                                    <div style="font-size:12px;color:#94a3b8;">Sistem Statusu</div>
+                                    <div style="font-size:16px;font-weight:700;color:#06b6d4;">✅ Aktiv</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Change -->
+                    <div id="tab-password" class="tab-content hidden">
+                        <div class="password-section">
+                            <h3>🔑 Parol Dəyiş</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Cari Parol</label>
+                                    <input type="password" id="currentPassword" placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label>Yeni Parol</label>
+                                    <input type="password" id="newPassword" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top:12px;">
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label>Yeni Parol (təkrar)</label>
+                                    <input type="password" id="confirmPassword" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <button class="btn-change-password" onclick="changePassword()" id="changePassBtn">
+                                🔄 Parolu Yenilə
+                            </button>
+                            <div class="info-box">
+                                💡 <strong>Məsləhət:</strong> Parol ən azı 8 simvol olmalı, böyük hərf, kiçik hərf və rəqəm daxil edin.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div id="tab-settings" class="tab-content hidden">
+                        <div class="placeholder">
+                            <div style="font-size:36px;margin-bottom:12px;">⚙️</div>
+                            <p style="font-weight:600;color:#0f172a;font-size:16px;">Sistem Parametrləri</p>
+                            <div style="text-align:left;margin-top:16px;">
+                                <div class="setting-item">
+                                    <span class="label">🔔 Bildirişlər</span>
+                                    <button class="toggle-btn active" onclick="toggleSetting(this)"></button>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="label">🌙 Qaranlıq Rejim</span>
+                                    <button class="toggle-btn inactive" onclick="toggleSetting(this)"></button>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="label">🔒 İki Faktorlu Doğrulama</span>
+                                    <button class="toggle-btn inactive" onclick="toggleSetting(this)"></button>
+                                </div>
+                                <div class="setting-item">
+                                    <span class="label">📱 Push Bildirişlər</span>
+                                    <button class="toggle-btn active" onclick="toggleSetting(this)"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users -->
+                    <div id="tab-users" class="tab-content hidden">
+                        <div class="placeholder">
+                            <div style="font-size:36px;margin-bottom:12px;">👥</div>
+                            <p style="font-weight:600;color:#0f172a;font-size:16px;">İstifadəçilər</p>
+                            <p style="font-size:13px;color:#94a3b8;">Bu bölmə tezliklə aktiv olacaq.</p>
+                            <div style="margin-top:16px;text-align:left;background:white;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+                                <div style="font-size:12px;color:#94a3b8;">Toplam istifadəçi: <strong id="userCount2" style="color:#0f172a;">0</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ADMIN KREDENTİALLARI (İSTƏDİYİN KİMİ DƏYİŞ)
+        // ============================================================
+        const VALID_EMAIL = "admin@xezerkredit.az";
+        let VALID_PASSWORD = "XezerAdmin2026!";
+
+        // ============================================================
+        // TOKEN SAXLAMA
+        // ============================================================
+        const ADMIN_TOKEN_KEY = "xk_admin_token_v1";
+
+        // Səhifə yükləndikdə token varsa birbaşa panel açılsın
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+            if (token === "authenticated") {
+                showAdminPanel();
+            }
+            
+            // Enter düyməsi ilə giriş
+            document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            document.getElementById('adminEmail').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+        });
+
+        // ============================================================
+        // GİRİŞ FUNKSİYASI
+        // ============================================================
+        function handleLogin() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginText = document.getElementById('loginText');
+
+            if (!email || !password) {
+                errorMsg.textContent = '❌ Email və parol daxil edin!';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginText.innerHTML = '<span class="spinner"></span> Yoxlanılır...';
+            errorMsg.classList.remove('show');
+
+            setTimeout(() => {
+                if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+                    localStorage.setItem(ADMIN_TOKEN_KEY, "authenticated");
+                    showAdminPanel();
+                    loginBtn.disabled = false;
+                    loginText.textContent = '✅ Daxil Olundu!';
+                    setTimeout(() => {
+                        loginText.textContent = 'Daxil Ol';
+                    }, 1000);
+                } else {
+                    errorMsg.textContent = '❌ Yanlış email və ya parol!';
+                    errorMsg.classList.add('show');
+                    loginBtn.disabled = false;
+                    loginText.textContent = 'Daxil Ol';
+                    document.getElementById('adminPassword').value = '';
+                    document.getElementById('adminPassword').focus();
+                }
+            }, 800);
+        }
+
+        // ============================================================
+        // PANEL GÖSTƏR
+        // ============================================================
+        function showAdminPanel() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('adminPanel').classList.remove('hidden');
+            updateUserCount();
+        }
+
+        function updateUserCount() {
+            // İstifadəçi sayını yenilə (simulyasiya)
+            const count = Math.floor(Math.random() * 50) + 15;
+            document.getElementById('userCount').textContent = count;
+            document.getElementById('userCount2').textContent = count;
+        }
+
+        // ============================================================
+        // TAB KEÇİDİ
+        // ============================================================
+        function switchTab(tabId) {
+            // Tab düymələrini yenilə
+            document.querySelectorAll('.admin-tabs button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Tab məzmunlarını yenilə
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+        }
+
+        // ============================================================
+        // PAROL DƏYİŞ
+        // ============================================================
+        function changePassword() {
+            const current = document.getElementById('currentPassword').value.trim();
+            const newPass = document.getElementById('newPassword').value.trim();
+            const confirm = document.getElementById('confirmPassword').value.trim();
+            const btn = document.getElementById('changePassBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+
+            // Validasiya
+            if (!current || !newPass || !confirm) {
+                errorMsg.textContent = '❌ Bütün sahələri doldurun!';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            if (current !== VALID_PASSWORD) {
+                errorMsg.textContent = '❌ Cari parol yanlışdır!';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            if (newPass.length < 8) {
+                errorMsg.textContent = '❌ Yeni parol ən azı 8 simvol olmalıdır!';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            if (newPass !== confirm) {
+                errorMsg.textContent = '❌ Parollar uyğun gəlmir!';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            if (newPass === current) {
+                errorMsg.textContent = '❌ Yeni parol cari parolla eyni ola bilməz!';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            // Parolu dəyiş
+            btn.disabled = true;
+            btn.textContent = '⏳ Yenilənir...';
+
+            setTimeout(() => {
+                VALID_PASSWORD = newPass;
+                btn.disabled = false;
+                btn.textContent = '🔄 Parolu Yenilə';
+                successMsg.textContent = '✅ Parol uğurla dəyişdirildi!';
+                successMsg.classList.add('show');
+
+                // Formaları təmizlə
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+
+                // 3 saniyədən sonra mesajı gizlət
+                setTimeout(() => {
+                    successMsg.classList.remove('show');
+                }, 3000);
+            }, 1200);
+        }
+
+        // ============================================================
+        // SETTINGS TOGGLE
+        // ============================================================
+        function toggleSetting(btn) {
+            btn.classList.toggle('active');
+            btn.classList.toggle('inactive');
+        }
+
+        // ============================================================
+        // ÇIXIŞ
+        // ============================================================
+        function logout() {
+            localStorage.removeItem(ADMIN_TOKEN_KEY);
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('errorMsg').classList.remove('show');
+            document.getElementById('successMsg').classList.remove('show');
+            document.getElementById('loginBtn').disabled = false;
+            document.getElementById('loginText').textContent = 'Daxil Ol';
+
+            // Tabları sıfırla
+            switchTab('dashboard');
+        }
+
+        // ============================================================
+        // TƏHLÜKƏSİZLİK
+        // ============================================================
+        Object.freeze(VALID_EMAIL);
+        // VALID_PASSWORD dəyişə bilər, ona görə freeze etmirik
+    </script>
+</body>
+  </html>
